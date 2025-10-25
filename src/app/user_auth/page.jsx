@@ -36,7 +36,7 @@ const UserAuth = () => {
 
         {/* Right Section (Form) */}
         <div className="flex-1 flex items-center justify-center p-6">
-          <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-2xl border border-gray-200">
+          <div className="w-full max-w-md p-8 rounded-2xl ">
             {Login ? (
               <UserLogin onToggle={() => setLogin(false)} />
             ) : (

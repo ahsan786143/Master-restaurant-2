@@ -36,7 +36,7 @@ const UserLogin = ({ onToggle }) => {
       localStorage.setItem("user", JSON.stringify(data));
 
       // redirect
-      window.location.href = "/";
+      window.location.href = "https://master-restaurant-2.vercel.app/";
     } catch (err) {
       console.error("Login error:", err);
       setError("Something went wrong. Please try again.");
