@@ -36,7 +36,7 @@ const UserLogin = ({ onToggle }) => {
       localStorage.setItem("user", JSON.stringify(data));
 
       // redirect
-      window.location.href = "http://localhost:3000/";
+      window.location.href = "/";
     } catch (err) {
       console.error("Login error:", err);
       setError("Something went wrong. Please try again.");
