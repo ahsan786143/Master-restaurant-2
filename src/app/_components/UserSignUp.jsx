@@ -41,7 +41,7 @@ const UserSignUp = ({ onToggle }) => {
 
       if (res.ok) {
         localStorage.setItem("user", JSON.stringify(data));
-        router.push("/");
+        router.push("https://master-restaurant-2.vercel.app/");
       } else {
         setErrorMsg(data.error || "Signup failed. Please try again.");
       }
