@@ -107,17 +107,28 @@ export async function PUT(request) {
   }
 }
 
-// ---------------- GET USERS ----------------
+
+// ---------------- GET U----------------
 export async function GET() {
   try {
     await connectToDatabase();
-    const users = await User.find().select("-password").limit(50);
-    return NextResponse.json(users, { status: 200 });
+
+    const users = await User.find().select("-password").limit(100);
+
+    return NextResponse.json(
+      {
+        success: true,
+        totalUsers: users.length,
+        users,
+      },
+      { status: 200 }
+    );
   } catch (err) {
     console.error("Get users error:", err);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    return NextResponse.json({ success: false, error: "Server error" }, { status: 500 });
   }
 }
+
 
 // ---------------- UPDATE USER ----------------
 export async function PATCH(request) {

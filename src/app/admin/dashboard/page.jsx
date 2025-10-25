@@ -21,7 +21,7 @@ export default function DashboardPage() {
     activeRestaurants: 0,
   });
 
-  //  Fetch all stats from backend
+  // ✅ Fetch all stats from backend
   useEffect(() => {
     const fetchStats = async () => {
       try {
@@ -29,34 +29,38 @@ export default function DashboardPage() {
           fetch("/api/user"),
           fetch("/api/contact"),
           fetch("/api/restaurant"),
-          
         ]);
 
         const usersData = await usersRes.json();
         const contactsData = await contactsRes.json();
         const restaurantsData = await restaurantsRes.json();
 
+        // ----- USERS -----
         let totalUsers = 0;
         let activeUsers = 0;
-
-        if (usersData.success && usersData.users) {
+        if (usersData.users) {
           totalUsers = usersData.totalUsers || usersData.users.length;
-          activeUsers = usersData.activeUsers || 0;
-        } else if (Array.isArray(usersData)) {
-          totalUsers = usersData.length;
-          activeUsers = usersData.filter((u) => u.isActive === true).length;
+          activeUsers = usersData.users.filter((u) => u.isActive === true).length;
+        }
+
+        // ----- RESTAURANTS -----
+        let totalRestaurants = 0;
+        let activeRestaurants = 0;
+        if (restaurantsData.users) {
+          totalRestaurants = restaurantsData.totalUsers || restaurantsData.users.length;
+          activeRestaurants = restaurantsData.users.filter(
+            (r) => r.isActive === true
+          ).length;
         }
 
         setStats({
           totalUsers,
           activeUsers,
-          totalMessages: contactsData.success ? contactsData.contacts.length : 0,
-          totalRestaurants: restaurantsData.success
-            ? restaurantsData.totalRestaurants
+          totalMessages: contactsData.success
+            ? contactsData.contacts?.length || 0
             : 0,
-          activeRestaurants: restaurantsData.success
-            ? restaurantsData.activeRestaurants
-            : 0,
+          totalRestaurants,
+          activeRestaurants,
         });
       } catch (error) {
         console.error("Error loading dashboard stats:", error);
@@ -66,13 +70,13 @@ export default function DashboardPage() {
     fetchStats();
   }, []);
 
-  //  Logout function
+  // ✅ Logout function
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
     router.push("/admin");
   };
 
-  //  Sidebar menu (added Manage Restaurants)
+  // ✅ Sidebar menu
   const menuItems = [
     {
       name: "Dashboard",
@@ -136,7 +140,9 @@ export default function DashboardPage() {
 
       {/* 🔹 Main Dashboard Area */}
       <main className="flex-1 p-8 overflow-y-auto">
-        <h2 className="text-3xl font-bold text-blue-700 mb-4">Dashboard Overview</h2>
+        <h2 className="text-3xl font-bold text-blue-700 mb-4">
+          Dashboard Overview
+        </h2>
         <p className="text-gray-600 mb-8">
           You have successfully logged in with your admin credentials.
         </p>
@@ -146,17 +152,23 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
             <h3 className="text-xl font-semibold text-gray-700">Total Users</h3>
-            <p className="text-3xl font-bold text-blue-700 mt-2">{stats.totalUsers}</p>
+            <p className="text-3xl font-bold text-blue-700 mt-2">
+              {stats.totalUsers}
+            </p>
           </div>
 
           <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
             <h3 className="text-xl font-semibold text-gray-700">Active Users</h3>
-            <p className="text-3xl font-bold text-green-600 mt-2">{stats.activeUsers}</p>
+            <p className="text-3xl font-bold text-green-600 mt-2">
+              {stats.activeUsers}
+            </p>
           </div>
 
           <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
             <h3 className="text-xl font-semibold text-gray-700">Messages</h3>
-            <p className="text-3xl font-bold text-blue-700 mt-2">{stats.totalMessages}</p>
+            <p className="text-3xl font-bold text-blue-700 mt-2">
+              {stats.totalMessages}
+            </p>
           </div>
         </div>
 
@@ -166,12 +178,18 @@ export default function DashboardPage() {
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-            <h3 className="text-xl font-semibold text-gray-700">Total Restaurants</h3>
-            <p className="text-3xl font-bold text-blue-700 mt-2">{stats.totalRestaurants}</p>
+            <h3 className="text-xl font-semibold text-gray-700">
+              Total Restaurants
+            </h3>
+            <p className="text-3xl font-bold text-blue-700 mt-2">
+              {stats.totalRestaurants}
+            </p>
           </div>
 
           <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-            <h3 className="text-xl font-semibold text-gray-700">Active Restaurants</h3>
+            <h3 className="text-xl font-semibold text-gray-700">
+              Active Restaurants
+            </h3>
             <p className="text-3xl font-bold text-green-600 mt-2">
               {stats.activeRestaurants}
             </p>

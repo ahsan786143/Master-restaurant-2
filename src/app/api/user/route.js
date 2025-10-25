@@ -107,10 +107,19 @@ export async function PUT(request) {
 export async function GET() {
   try {
     await connectToDatabase();
-    const users = await UserSignUp.find().select("-password").limit(50);
-    return NextResponse.json(users);
+
+    const users = await UserSignUp.find().select("-password").limit(100);
+
+    return NextResponse.json(
+      {
+        success: true,
+        totalUsers: users.length,
+        users,
+      },
+      { status: 200 }
+    );
   } catch (err) {
     console.error("Get users error:", err);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    return NextResponse.json({ success: false, error: "Server error" }, { status: 500 });
   }
 }
